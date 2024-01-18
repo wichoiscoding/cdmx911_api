@@ -16,7 +16,7 @@ app = FastAPI()
 @app.get('/name-alcaldia')
 def get_name_alcaldia():
 
-    with open('../data/latlon.json', 'r') as archivo:
+    with open('data/latlon.json', 'r') as archivo:
         data = json.load(archivo)
 
     names_alcaldias = data['Alcaldia']
@@ -26,7 +26,7 @@ def get_name_alcaldia():
 @app.get('/latlon')
 def get_latlon(name_alcaldia: str):
 
-    with open('../data/latlon.json', 'r') as archivo:
+    with open('data/latlon.json', 'r') as archivo:
         data = json.load(archivo)
 
     indice_alcaldia = data['Alcaldia'].index(name_alcaldia)
@@ -39,7 +39,7 @@ def get_latlon(name_alcaldia: str):
 
 @app.get('/main-map')
 def get_main_map():
-    mapa = gpd.read_file('../data/joe_map.geojson')
+    mapa = gpd.read_file('data/joe_map.geojson')
     mapa = json.loads(mapa.to_json())
     return mapa
 
@@ -47,7 +47,7 @@ def get_main_map():
 def get_dynamic_data(name_alcaldia: str):
 
     # Verificar si el archivo ya existe localmente
-    local_file_path = f'../data/{name_alcaldia}_data.csv'
+    local_file_path = f'data/{name_alcaldia}_data.csv'
 
     if os.path.exists(local_file_path):
         data_alcaldia = pd.read_csv(local_file_path)
