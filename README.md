@@ -1,4 +1,4 @@
-# Step by step of how to run an API: cdmx911_api
+# Step by step of how to run the API: cdmx911_api
 
 ## Step one: You need to clone the repository url:
 
@@ -18,8 +18,32 @@ pyenv virtualenv cdmx911_api
 pip install -r requirements.txt
 ```
 
-# How to run the app
+## Now you can run it!
 
 ```
 make run_api
+```
+
+
+# Step by step of how to run the API using DOCKER
+
+## Step one:
+```
+echo "GAR_IMAGE=cdmx911" >> .env
+echo "GCP_PROJECT=lewagon-bootcamp-404323" >> .env
+echo "GCP_REGION=europe-west1" >> .env
+echo "PORT=8000" >> .env
+echo "BUCKET_NAME=cdmx911" >> .env
+
+```
+
+## Step Two:
+```
+docker build --tag=$GAR_IMAGE:dev .
+```
+
+## Step Three:
+```
+docker run -it -e PORT=$PORT -p $PORT
+:$PORT $GAR_IMAGE:dev
 ```
