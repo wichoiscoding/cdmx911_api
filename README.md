@@ -1,4 +1,4 @@
-# Step by step of how to run the API: cdmx911_api
+# Step by step of how to run the API (Local)
 
 ## Step one: You need to clone the repository url:
 
@@ -9,6 +9,7 @@ git clone git@github.com:wichoiscoding/cdmx911_api.git
 ## After the clone, you need to create your new enviroment with:
 
 ```
+cd cdmx911_api
 pyenv virtualenv cdmx911_api
 ```
 
@@ -27,7 +28,7 @@ make run_api
 
 # Step by step of how to run the API using DOCKER
 
-## Step one:
+## Step One:
 ```
 echo "GAR_IMAGE=cdmx911" >> .env
 echo "GCP_PROJECT=lewagon-bootcamp-404323" >> .env
