@@ -91,3 +91,37 @@ def get_dynamic_data(name_alcaldia: str):
     result = data_grouped.to_dict(orient='records')
 
     return {'data': result}
+
+@app.get('/model-data')
+def get_model_data(name_alcaldia: str):
+    # Verificar si el archivo ya existe localmente
+    local_file_path = f'data/predictions/{name_alcaldia}_pred.csv'
+    if os.path.exists(local_file_path):
+        pred_alcaldia = pd.read_csv(local_file_path)
+    else:
+        #gc info
+        name_alcaldia = name_alcaldia.replace(' ', '_')
+        bucket_name = os.getenv('BUCKET_NAME')
+        file_name = f'predictions/{name_alcaldia}_pred.csv'
+        project_id = os.getenv('GCP_PROJECT')
+        # Configura la conexión a gc
+        client = storage.Client(project=project_id)
+        bucket = client.bucket(bucket_name)
+        # Descarga el archivo CSV como BytesIO
+        blob = bucket.blob(file_name)
+        content = blob.download_as_text()
+        csv_data = BytesIO(content.encode('utf-8'))
+        pred_alcaldia = pd.read_csv(csv_data)
+        # Convierte la columna 'fecha_creacion' a tipo datetime
+        pred_alcaldia['semana_creacion'] = pd.to_datetime(pred_alcaldia['semana_creacion'])
+        # Extrae el año y el mes de la fecha de creación
+        pred_alcaldia['month'] = pred_alcaldia['semana_creacion'].dt.month_name()
+        # Guardar data local
+        pred_alcaldia.to_csv(local_file_path, index=False)
+    # Agrupa por año, mes y tipo de incidente y cuenta la frecuencia
+    data_grouped = pred_alcaldia.groupby('month')['numero_incidentes'].sum()
+    meses = ["January", "February", "March", "April", "May", "June", "July", "August"]
+    result = data_grouped.loc[meses].to_dict()
+    return {'data': result}
+
+print(get_model_data('COYOACAN'))
