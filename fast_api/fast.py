@@ -123,5 +123,3 @@ def get_model_data(name_alcaldia: str):
     meses = ["January", "February", "March", "April", "May", "June", "July", "August"]
     result = data_grouped.loc[meses].to_dict()
     return {'data': result}
-
-print(get_model_data('COYOACAN'))
